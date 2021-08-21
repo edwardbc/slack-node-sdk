@@ -10,6 +10,12 @@ class Slack
     @timeout = DEFAULT_TIMEOUT
     @maxAttempts = DEFAULT_MAX_ATTEMPTS
 
+    request = request.defaults({
+      headers: {
+        "Authorization": "Bearer " + @token
+      }
+    })
+
   composeUrl: =>
     return "https://slack.com/api/"
 
@@ -77,6 +83,7 @@ class Slack
     }
 
     if @_is_post_api(method)
+      delete options.token
       request_arg.method = "POST"
       request_arg.formData = options
     else
@@ -103,6 +110,6 @@ class Slack
     return this
 
   _is_post_api: (method) ->
-    method is "files.upload"
+    true
 
 module.exports = Slack
